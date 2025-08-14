@@ -2,7 +2,8 @@
     "userspace_version": "1.1",
     "build_targets": [
         ["reviung/reviung5", "primarymercury9"],
-        ["annepro2/c18", "default"],
-        ["splitkb/kyria/rev2/base", "default"]
+        ["splitkb/kyria/rev3", "primarymercury9"],
+        ["annepro2", "primarymercury9"],
+        ["dumbpad/v1x_oled", "primarymercury9"]
     ]
 }

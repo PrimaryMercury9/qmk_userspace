@@ -1,6 +1,7 @@
 SRC += private_macros.c
 SRC += work_macros.c
-include $(KEYBOARD_PATH_2)/keymaps/$(KEYMAP)/qmk-vim/rules.mk
+#include $(KEYBOARD_PATH_2)/keymaps/$(KEYMAP)/qmk-vim/rules.mk
+include ~/Documents/01-Projects/keyboards/qmk_userspace/keyboards/splitkb/kyria/rev3/keymaps/primarymercury9/qmk-vim/rules.mk
 
 
 USE_VIM = yes
