@@ -1,0 +1,56 @@
+#pragma once
+#define OLED_DISPLAY_128X64
+#define SPLIT_WPM_ENABLE
+#define OLED_FONT_END 127
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+#define TAPPING_TERM 135
+#define COMBO_TERM 10
+#define DYNAMIC_MACRO_SIZE 256
+#define OLED_TIMEOUT 5000
+
+#define VIM_NUMBERED_JUMPS
+#define VIM_DOT_REPEATS
+#define VIM_FOR_ALL
+#define VIM_REPLACE
+#define VIM_PASTE_BEFORE
+#define VIM_COLON_CMDS
+#define VIM_A_TEXT_OBJECTS
+#define VIM_I_TEXT_OBJECTS
+#define VIM_BETTER_VISUAL_MODE
+
+//#define SPLIT_KEYBOARD
+//#define SPLIT_USB_DETECT
+//#define SPLIT_TRANSPORT_MIRROR
+//#define SPLIT_TRANSACTION_IDS_USER JIGGLE_STATE_SYNC, LEADER_STATE_SYNC
+// Enable split syncing for user data
+//#define SPLIT_TRANSACTION_IDS_USER USER_SYNC_EFFECTS
+
+/* Leader key settings */
+//Timout doesn't start until the first key is pressed
+#define LEADER_NO_TIMEOUT
+//Timout re-starts after every keypress
+#define LEADER_PER_KEY_TIMING
+#define LEADER_TIMEOUT 750
+
+#define OS_DETECTION_DEBOUNCE 2500
+#define OS_DETECTION_KEYBOARD_RESET
+#define SPLIT_DETECTED_OS_ENABLE
+
+//#define ENABLE_RGB_MATRIX_TYPING_HEATMAP
+//#define ENABLE_RGB_MATRIX_SOLID_REACTIVE
+//#define ENABLE_RGB_MATRIX_SOLID_COLOR = 1
+//#define RGB_MATRIX_DEFAULT_HUE 0
+//#define RGB_MATRIX_DEFAULT_SAT 255
+//#define RGB_MATRIX_DEFAULT_VAL 255
+#define SPLIT_LAYER_STATE_ENABLE
+
+#define NO_ACTION_MACRO
+#define NO_ACTION_FUNCTION
+
+#ifndef NO_DEBUG
+  #define NO_DEBUG
+#endif // !NO_DEBUG
+
+#if !defined(NO_PRINT) && !defined(CONSOLE_ENABLE)
+  #define NO_PRINT
+#endif // !NO_PRINT

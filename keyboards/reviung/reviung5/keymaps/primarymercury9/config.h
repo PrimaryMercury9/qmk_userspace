@@ -1,0 +1,18 @@
+#pragma once
+// Setup
+#define DIODE_DIRECTION COL2ROW
+
+// My Options
+#define TAPPING_TERM 150
+#define LEADER_TIMEOUT 500
+#define ENCODER_DIRECTION_FLIP
+#define OS_DETECTION_DEBOUNCE 250
+#define OS_DETECTION_KEYBOARD_RESET
+//#define COMBO_TERM 10
+
+//RGB lighting
+#define RGBLIGHT_LAYERS
+#define RGBLIGHT_LED_COUNT 4
+//#define RGBLIGHT_LIMIT_VAL 128
+#define RGBLIGHT_SLEEP
+#define WS2812_DI_PIN D3

@@ -14,3 +14,7 @@
 compile_commands.json
 .clangd/
 .cache/
+
+# private macros
+private_macros.c
+private_macros.h
