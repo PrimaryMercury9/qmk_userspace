@@ -4,6 +4,8 @@
         ["reviung/reviung5", "primarymercury9"],
         ["splitkb/kyria/rev3", "primarymercury9"],
         ["annepro2", "primarymercury9"],
-        ["dumbpad/v1x_oled", "primarymercury9"]
+        ["dumbpad/v1x_oled", "primarymercury9"],
+        ["crkbd/rev1", "primarymercury9"],
+        ["kprepublic/jj40/rev1", "primarymercury9"]
     ]
 }
