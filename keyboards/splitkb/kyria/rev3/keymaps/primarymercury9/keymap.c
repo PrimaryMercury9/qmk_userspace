@@ -96,13 +96,6 @@ enum custom_keycodes {
 };
 
 /*#############################################################################
-                             Jiggler Toggle
-#############################################################################*/
-//void toggle_jiggler(void) {
-//    is_jiggling = !is_jiggling; /*flip boolean to true*/
-//}
-
-/*#############################################################################
                                  Aliases
 #############################################################################*/
 #define CC_TAB     LCTL_T(KC_TAB)
@@ -230,27 +223,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-//#############################################################################
-//   Jiggler Settings
-//#############################################################################
-///*timers*/
-//uint32_t idle_timeout = 30000; // (after 30s)
-//uint32_t mouse_interval = 12000; // (every 10s)
-//
-///*jiggler action*/
-//static uint32_t idle_callback(uint32_t trigger_time, void* cb_arg) {
-//    // now idle
-//    if (is_jiggling){
-//        tap_code(KC_MS_UP);
-//        tap_code(KC_MS_DOWN);
-//        tap_code(KC_MS_LEFT);
-//        tap_code(KC_MS_RIGHT);
-//        return mouse_interval;
-//    }
-//      return false;
-//
-//}
-
 /*#############################################################################
                               Set Macros
 #############################################################################*/
@@ -271,12 +243,6 @@ bool process_local_macros(uint16_t keycode, keyrecord_t *record) {
           }
           break;
 
-          //case CC_JIGG:
-          //  if (record->event.pressed) {
-          //      toggle_jiggler();
-          //  }
-          //  break;
-
         case CC_ATAB:
             if (record->event.pressed) {
                 if (!is_alt_tab_active) {
@@ -296,13 +262,7 @@ bool process_local_macros(uint16_t keycode, keyrecord_t *record) {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // on every key event start or extend `idle_callback()` deferred execution after IDLE_TIMEOUT_MS
-    // this is used as the timer to trigger the jiggler after a period of inactivity on the keyboard
-    //static deferred_token idle_token = INVALID_DEFERRED_TOKEN;
-    //    if (!extend_deferred_exec(idle_token, idle_timeout)) {
-    //        idle_token = defer_exec(idle_timeout, idle_callback, NULL);
-    //}
-        if (keycode == CC_JIGG && record->event.pressed) {
+    if (keycode == CC_JIGG && record->event.pressed) {
         toggle_jiggler();
         return false;  // Consume key here
     }
