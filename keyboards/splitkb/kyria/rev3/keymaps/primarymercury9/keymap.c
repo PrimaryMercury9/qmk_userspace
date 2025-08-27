@@ -94,7 +94,7 @@ enum custom_keycodes {
     MACRO_CELL_EDIT = LOCAL_SAFE_RANGE,
     CTRL_BKSP,
     CC_JIGG,
-    CC_ATAB,
+    CC_ATAB
 };
 
 //#############################################################################
@@ -134,11 +134,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_NAV] = LAYOUT(
   //,-----------------------------------------------------------------------|           |-----------------------------------------------------------------------.
-     _______, XXXXXXX, DM_REC1, DM_REC2, XXXXXXX, CC_JIGG,                                                 KC_HOME, KC_PGDN, KC_PGUP,  KC_END, KC_VOLU, QK_LEAD,
+     _______, XXXXXXX, DM_PLY1, DM_PLY2, XXXXXXX, CC_JIGG,                                                 KC_HOME, KC_PGDN, KC_PGUP,  KC_END, KC_VOLU, QK_LEAD,
   //|--------+--------+--------+--------+--------+--------+--------+--------|           |--------+--------+--------+--------+--------+--------+--------+--------|
      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                                 KC_LEFT, KC_DOWN,  KC_UP , KC_RGHT, KC_MUTE, _______,
   //|--------+--------+--------+--------+--------+--------+--------+--------|           |--------+--------+--------+--------+--------+--------+--------+--------|
-     _______, XXXXXXX, DM_PLY1, DM_PLY2, DM_RSTP, XXXXXXX, KC_VOLD, KC_VOLU,            KC_PGDN , KC_PGUP, KC_MPRV, KC_MSTP, KC_MPLY, KC_MNXT, KC_VOLD, _______,
+     _______, XXXXXXX, DM_REC1, DM_REC2, DM_RSTP, XXXXXXX, KC_VOLD, KC_VOLU,            KC_PGDN , KC_PGUP, KC_MPRV, KC_MSTP, KC_MPLY, KC_MNXT, KC_VOLD, _______,
   //|--------+--------+--------+--------+--------+--------+--------+--------|           |--------+--------+--------+--------+--------+--------+--------+--------|
                                 _______, CC_MOUS,  CC_HW , KC_DEL , QK_RBT ,            CC_EDIT , KC_CAPS, _______, _______, _______
                              //`--------------------------------------------|           |---------------------------------------------'
@@ -253,24 +253,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 };
 
 //#############################################################################
-//                           Auto Shift
-//#############################################################################
-#if defined(AUTO_SHIFT_ENABLE)
-uint16_t get_autoshift_timeout(uint16_t keycode, keyrecord_t *record) {
-    switch(keycode) {
-        case AUTO_SHIFT_NUMERIC:
-            return get_generic_autoshift_timeout();
-        case AUTO_SHIFT_SPECIAL:
-            return 2 * get_generic_autoshift_timeout() + 1;
-        case AUTO_SHIFT_ALPHA:
-            return 2 * get_generic_autoshift_timeout() + 1;
-        default:
-            return get_generic_autoshift_timeout();
-    }
-}
-#endif
-
-//#############################################################################
 //                             RGB
 //#############################################################################
 #if defined(RGB_MATRIX_ENABLE)
@@ -330,60 +312,6 @@ void keyboard_post_init_user(void) {
 }
 #endif
 
-//#############################################################################
-//                             Encoders
-//#############################################################################
-#if defined(ENCODER_ENABLE)
-bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
-        if (IS_LAYER_ON(_QWERTY)) {
-            if (clockwise) {
-                if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LALT);
-                }
-                alt_tab_timer = timer_read();
-                tap_code(KC_TAB);
-            } else {
-                 if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LALT);
-                }
-            alt_tab_timer = timer_read();
-            tap_code16(S(KC_TAB)); // Shift+Tab for reverse cycling
-            }
-        }
-
-        if (IS_LAYER_ON(_NAV)) {
-            if (clockwise) {
-                tap_code(MS_WHLD);
-            } else {
-                tap_code(MS_WHLU);
-            }
-        }
-    }
-
-    if (index == 1) {
-        if (IS_LAYER_ON(_QWERTY)) {
-            if (clockwise) {
-                tap_code(KC_VOLU);
-            } else {
-                tap_code(KC_VOLD);
-            }
-        }
-        if (IS_LAYER_ON(_NAV)) {
-            if (clockwise) {
-                tap_code(MS_WHLD);
-            } else {
-                tap_code(MS_WHLU);
-            }
-        }
-    }
-
-    return false;
-}
-#endif
-
 /*#############################################################################
                             AltTab Timer
 #############################################################################*/
@@ -404,8 +332,9 @@ void leader_start_user(void) {
 }
 
 void leader_end_user(void) {
-    if (leader_sequence_two_keys(KC_P, KC_O)) {
-        SEND_STRING(SS_LCTL("N") SS_DELAY(250));
+    if (leader_sequence_two_keys(KC_P, KC_M)) {
+        SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_N) SS_UP(X_LCTL));
+        SEND_STRING(SS_DELAY(500));
         SEND_STRING("Post meeting");
         SEND_STRING(SS_TAP(X_TAB));
         SEND_STRING(SS_TAP(X_TAB));
