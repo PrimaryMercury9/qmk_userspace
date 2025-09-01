@@ -125,16 +125,16 @@ enum layers {
 //                             Keymaps
 //#############################################################################
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [_QWERTY] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------|             |-----------------------------------------------------.
-     CC_TAB ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,                KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  , KC_BSPC,
-  //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
-     CC_ESC ,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  ,                KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLN , CC_QUOT,
-  //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
-     KC_LSFT,  KC_Z  ,  KC_X  ,  KC_C  ,  KC_V  ,  KC_B  ,                KC_N  ,  KC_M  , KC_COMM, KC_DOT ,KC_SLSH , KC_RSFT,
-  //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
-                                CC_LGUI, CC_BSPC, CC_LENT,               CC_RENT, CC_SPC , CC_RGUI
-                             //`--------------------------|             |---------------------------'
+    [_QWERTY] = LAYOUT_split_3x6_3_ex2(
+  //,-------------------------------------------------------------|     |--------------------------------------------------------------.
+     CC_TAB ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  , CC_TMUT,       CC_TSHR,  KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  , KC_BSPC,
+  //|--------+--------+--------+--------+--------+--------+-------|     |--------+--------+--------+--------+--------+--------+--------|
+     CC_ESC ,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  , CC_TCAM,       CC_TEND,  KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLN , CC_QUOT,
+  //|--------+--------+--------+--------+--------+--------+-------|     |--------+--------+--------+--------+--------+--------+--------|
+     KC_LSFT,  KC_Z  ,  KC_X  ,  KC_C  ,  KC_V  ,  KC_B  ,                          KC_N  ,  KC_M  , KC_COMM, KC_DOT ,KC_SLSH , KC_RSFT,
+  //|--------+--------+--------+--------+--------+--------|                      |--------+--------+--------+--------+--------+--------|
+                                CC_LGUI, CC_BSPC, CC_LENT,                         CC_RENT, CC_SPC , CC_RGUI
+                             //`--------------------------|                      |---------------------------'
     ),
 
     [_NAV] = LAYOUT_split_3x6_3(
@@ -145,12 +145,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
      _______, XXXXXXX, DM_PLY1, DM_PLY2, DM_RSTP, XXXXXXX,               KC_MPRV, KC_MSTP, KC_MPLY, KC_MNXT, KC_VOLD, _______,
   //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
-                                 CC_HW , KC_DEL , QK_RBT ,               CC_EDIT, KC_CAPS, _______, _______, _______
+                                 CC_HW , KC_DEL , QK_RBT ,               CC_EDIT, KC_CAPS, _______
                              //`--------------------------|             |---------------------------'
 
   ),
 
-    [_NUMPAD] = LAYOUT_split_3x6_3( /*TODO: this map*/
+    [_NUMPAD] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------|             |-----------------------------------------------------.
      _______, KC_LBRC,  KC_7  ,  KC_8  ,  KC_9  , KC_RBRC,               XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
@@ -158,23 +158,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
      _______, KC_GRV ,  KC_1  ,  KC_2  ,  KC_3  , KC_BSLS,               XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
-                                KC_DOT ,   KC_0 , KC_MINS,               _______, _______, _______, _______,_______
+                                KC_DOT ,   KC_0 , KC_MINS,               _______, _______, _______
                              //`--------------------------|             |---------------------------'
   ),
 
-    [_SYM] = LAYOUT_split_3x6_3(/*TODO: this map*/
+    [_SYM] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------|             |-----------------------------------------------------.
-     _______, KC_LPRN, KC_LBRC, KC_LCBR, KC_MINS, KC_PIPE,               KC_EQL , KC_DQT , KC_RCBR, KC_RBRC, KC_RPRN, QK_LEAD,
+       _______, KC_LPRN, KC_LBRC, KC_LCBR, KC_MINS, KC_PIPE,               KC_EQL , KC_DQT , KC_RCBR, KC_RBRC, KC_RPRN, QK_LEAD,
   //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
-     _______,  KC_1  ,  KC_2  ,  KC_3  ,  KC_4  ,  KC_5  ,               KC_6   ,  KC_7  ,  KC_8  ,  KC_9  ,  KC_0  , _______,
+       _______,  KC_1  ,  KC_2  ,  KC_3  ,  KC_4  ,  KC_5  ,               KC_6   ,  KC_7  ,  KC_8  ,  KC_9  ,  KC_0  , _______,
   //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
-     _______, KC_TILD, KC_COLN, KC_SCLN, KC_UNDS, KC_BSLS,               KC_PLUS, KC_QUOT, XXXXXXX, XXXXXXX, KC_GRV , _______,
+       _______, KC_TILD, KC_COLN, KC_SCLN, KC_UNDS, KC_BSLS,               KC_PLUS, KC_QUOT, XXXXXXX, XXXXXXX, KC_GRV , _______,
   //|--------+--------+--------+--------+--------+--------|             |--------+--------+--------+--------+--------+--------|
-                                _______, KC_DEL , _______,               _______, _______, _______,
+                                 _______, KC_DEL , _______,               _______, _______, _______
                              //`--------------------------|             |---------------------------'
   ),
 
-    [_HW] = LAYOUT_split_3x6_3(/*TODO: this map*/
+    [_HW] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------|              |-----------------------------------------------------.
      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,                QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|              |--------+--------+--------+--------+--------+--------|
@@ -186,12 +186,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                              //`--------------------------|              |---------------------------'
   )
 };
-
-#ifdef ENCODER_MAP_ENABLE
-const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-  [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
-  [1] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
-  [2] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
-  [3] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
-};
-#endif
