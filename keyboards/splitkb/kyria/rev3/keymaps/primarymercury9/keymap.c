@@ -92,6 +92,8 @@ combo_t key_combos[] = {
 #############################################################################*/
 enum custom_keycodes {
     MACRO_CELL_EDIT = LOCAL_SAFE_RANGE,
+    MACRO_BROWSER_BACK,
+    MACRO_BROWSER_FORWARD,
     CTRL_BKSP,
     CC_JIGG,
     CC_ATAB,
@@ -182,7 +184,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_MOUSE] = LAYOUT(
   //,-----------------------------------------------------------------------|           |-----------------------------------------------------------------------.
-     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                                 XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                                 MS_BACK, XXXXXXX, XXXXXXX, MS_FWD , XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------+--------|           |--------+--------+--------+--------+--------+--------+--------+--------|
      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                                 MS_LEFT, MS_DOWN,  MS_UP , MS_RGHT, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------+--------|           |--------+--------+--------+--------+--------+--------+--------+--------|
@@ -209,6 +211,34 @@ bool process_local_macros(uint16_t keycode, keyrecord_t *record) {
                     break;
                 default:
                     tap_code(KC_F2);
+                    break;
+              }
+          }
+          break;
+
+        case MACRO_BROWSER_BACK:
+            if (record->event.pressed) {
+                switch (detected_host_os()) {
+                    case OS_MACOS:
+                    case OS_IOS:
+                        tap_code16(LGUI(KC_LBRC));
+                    break;
+                default:
+                    tap_code16(LALT(KC_LEFT));
+                    break;
+              }
+          }
+          break;
+
+        case MACRO_BROWSER_FORWARD:
+            if (record->event.pressed) {
+                switch (detected_host_os()) {
+                    case OS_MACOS:
+                    case OS_IOS:
+                        tap_code16(LGUI(KC_RBRC));
+                    break;
+                default:
+                    tap_code16(LALT(KC_RIGHT));
                     break;
               }
           }
@@ -392,6 +422,7 @@ void matrix_scan_user(void) {
         unregister_code(KC_LALT);
         is_alt_tab_active = false;
     }
+    oled_task();
 }
 
 /*#############################################################################

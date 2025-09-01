@@ -321,12 +321,14 @@ bool oled_task_user(void) {
         render_jiggling();
         oled_set_cursor(0, 7);
         render_leader();
+        return false;
     } else {
         // Secondary displays show OS logo
         oled_clear();
         render_os_logo();
+        return false;
     }
-    return true;
+    return false;
 }
 
 #endif

@@ -15,3 +15,6 @@
 #define CC_HW      MO(_HW)
 #define CC_EDIT    MACRO_CELL_EDIT
 #define CC_MOUS    MO(_MOUSE)
+
+#define MS_BACK    MACRO_BROWSER_BACK
+#define MS_FWD     MACRO_BROWSER_FORWARD
