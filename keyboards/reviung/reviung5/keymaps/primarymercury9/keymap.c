@@ -53,7 +53,7 @@ uint32_t random_mouse_interval(void) {
     return interval_ms + 5000;
 }
 /*#############################################################################
-                             Define Macros           
+                             Define Macros
 #############################################################################*/
 enum custom_keycodes {
     CC_JIGG = SAFE_RANGE,
@@ -65,7 +65,7 @@ enum custom_keycodes {
     CC_MUTE
 };
 /*#############################################################################
-                             Define Combos           
+                             Define Combos
 #############################################################################*/
 enum combos {
   CO_BOOT,
@@ -101,6 +101,7 @@ static uint32_t idle_callback(uint32_t trigger_time, void* cb_arg) {
         tap_code(KC_MS_DOWN);
         tap_code(KC_MS_LEFT);
         tap_code(KC_MS_RIGHT);
+        tap_code(KC_PAUSE);
     }
     mouse_interval = random_mouse_interval();
     return mouse_interval;
@@ -108,7 +109,7 @@ static uint32_t idle_callback(uint32_t trigger_time, void* cb_arg) {
 //#############################################################################
 //                          Combos
 //#############################################################################
-const uint16_t PROGMEM boot_combo[] = {CC_JIGG, KC_MNXT, COMBO_END};
+const uint16_t PROGMEM boot_combo[] = {CC_JIGG, CC_NEXT, COMBO_END};
 
 combo_t key_combos[] = {
   [CO_BOOT] = COMBO(boot_combo, QK_BOOT),
@@ -118,9 +119,9 @@ combo_t key_combos[] = {
 //#############################################################################
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
-        if (IS_LAYER_ON(_MEDIA)) {
-        tap_code16((clockwise == false) ? CC_VOLU : CC_VOLD);
-        }
+//        if (IS_LAYER_ON(_MEDIA)) {
+        tap_code16((clockwise == false) ? KC_VOLD : KC_VOLU);
+//        }
     }
 
     return false;
@@ -131,7 +132,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
     case _MEDIA:
-        rgblight_setrgb (RGB_CYAN); //Cyan
+        rgblight_setrgb (RGB_RED); //Cyan
         break;
     default:
         rgblight_setrgb (RGB_RED); //Magenta
@@ -141,7 +142,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 const rgblight_segment_t PROGMEM jiggler_led_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 1, HSV_PURPLE}
+    {0, 1, HSV_CYAN}
 );
 
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
@@ -150,12 +151,12 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
 
 void keyboard_post_init_user(void) {
     rgblight_enable_noeeprom();
-    rgblight_sethsv_noeeprom(HSV_TEAL);
+    rgblight_sethsv_noeeprom(187, 255, 140);
     rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
     rgblight_layers = my_rgb_layers;
 }
 /*#############################################################################
-                              Set Macros           
+                              Set Macros
 #############################################################################*/
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // on every key event start or extend `idle_callback()` deferred execution after IDLE_TIMEOUT_MS
