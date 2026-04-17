@@ -22,7 +22,7 @@ enum local_keycodes {
 //#define CC_TAB  LT(_PAGES,KC_TAB)
 #define CC_TAB  LCTL_T(KC_TAB)
 #define CC_LCTL LCTL_T(KC_ENT)
-#define CC_RCTL RCTL_T(KC_ENT)
+//#define CC_RCTL RCTL_T(KC_ENT)
 #define CC_SPC  LT(_FN1,KC_SPC)
 #define CC_BT1  KC_AP2_BT1
 #define CC_BT2  KC_AP2_BT2
@@ -32,14 +32,18 @@ enum local_keycodes {
 #define LED_ON  KC_AP_RGB_MOD
 #define LED_INT KC_AP_RGB_VAD
 #define LED_SPD KC_AP_RGB_VAI
+#define CC_RSFT  RSFT_T(KC_UP)
+#define CC_RALT  RALT_T(KC_LEFT)
+#define CC_RFN  LT(_FN1, KC_DOWN)
+#define CC_RCTL  RCTL_T(KC_RIGHT)
 
  const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  [_BASE] = LAYOUT_60_ansi( /* Base */
     KC_TILD ,  KC_1  ,  KC_2  ,  KC_3  ,  KC_4  ,  KC_5  ,  KC_6  ,  KC_7  ,  KC_8  ,  KC_9  ,  KC_0  ,KC_MINS , KC_EQL ,  KC_BSPC  ,
     CC_TAB     ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,  KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  , KC_LBRC, KC_RBRC, KC_BSLS,
     CC_ESC      ,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  ,  KC_H  ,  KC_J  ,  KC_K  ,  KC_L  , KC_SCLN, KC_QUOT,     KC_ENT     ,
-    SC_LSPO       ,  KC_Z  ,  KC_X  ,  KC_C  ,  KC_V  ,  KC_B  ,  KC_N  ,  KC_M  , KC_COMM, KC_DOT , KC_SLSH,        SC_RSPC        ,
-    CC_LCTL  , KC_LALT , KC_LGUI ,                        CC_SPC                      , KC_RGUI ,   KC_RALT  ,   CC_ESC ,   CC_RCTL
+    KC_LSFT       ,  KC_Z  ,  KC_X  ,  KC_C  ,  KC_V  ,  KC_B  ,  KC_N  ,  KC_M  , KC_COMM, KC_DOT , KC_SLSH,        CC_RSFT        ,
+    CC_LCTL  , KC_LALT , KC_LGUI ,                        CC_SPC                      , KC_RGUI ,   CC_RALT  ,   CC_RFN ,   CC_RCTL
 ),
 
  [_FN1] = LAYOUT_60_ansi( /* Base */
@@ -61,7 +65,7 @@ enum local_keycodes {
 };
 
 /*#############################################################################
-                                 LEDs           
+                                 LEDs
 #############################################################################*/
 void keyboard_post_init_user(void) {
     switch (detected_host_os()) {
@@ -77,7 +81,7 @@ void keyboard_post_init_user(void) {
 }
 
 /*#############################################################################
-                                 Leader           
+                                 Leader
 #############################################################################*/
 #if defined(LEADER_ENABLE)
 void leader_start_user(void) {
@@ -176,7 +180,7 @@ void leader_end_user(void) {
 }
 #endif
 /*#############################################################################
-                              Set Macros           
+                              Set Macros
 #############################################################################*/
 bool process_local_macros(uint16_t keycode, keyrecord_t *record) {
 
