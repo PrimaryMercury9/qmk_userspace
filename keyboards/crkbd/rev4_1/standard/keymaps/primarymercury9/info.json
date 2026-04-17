@@ -9,9 +9,9 @@
         "bootmagic": true,
         "extrakey": true,
         "nkro": true,
-        "oled": true,
+        "oled": false,
         "rgblight": false,
-        "rgb_matrix": false
+        "rgb_matrix": true
     },
     "bootmagic": {
         "matrix": [0, 1]

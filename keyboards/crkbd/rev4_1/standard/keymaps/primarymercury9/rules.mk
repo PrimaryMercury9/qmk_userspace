@@ -1,3 +1,6 @@
+SRC += private_macros.c
+SRC += work_macros.c
+SRC += mouse_jiggler.c
 UNICODE_ENABLE = no
 TAP_DANCE_ENABLE = yes
 RGB_MATRIX_CUSTOM_USER = no
@@ -8,3 +11,8 @@ NKRO_ENABLE = yes
 MAGIC_ENABLE = no
 BOOTMAGIC_ENABLE = no
 MOUSEKEY_ENABLE = yes
+LEADER_ENABLE = yes
+DYNAMIC_MACRO_ENABLE = yes
+#OS Detection stuff
+OS_DETECTION_ENABLE = yes
+DEFERRED_EXEC_ENABLE = yes
