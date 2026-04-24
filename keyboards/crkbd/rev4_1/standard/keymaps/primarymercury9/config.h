@@ -26,7 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define TAPPING_TERM 100
 
 #define TAPPING_TERM 135
+#define DYNAMIC_MACRO_NO_NESTING true
 #define DYNAMIC_MACRO_SIZE 2048
+#define DYNAMIC_MACRO_DELAY 25
 
 /* Leader */
 #define LEADER_NO_TIMEOUT
@@ -34,30 +36,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LEADER_TIMEOUT 750
 
 /* OS Detection */
-#define OS_DETECTION_DEBOUNCE 2500
+#define OS_DETECTION_DEBOUNCE 3500
 #define OS_DETECTION_KEYBOARD_RESET
 #define SPLIT_DETECTED_OS_ENABLE
 
-/* Lighting */
-#ifdef RGBLIGHT_ENABLE
-    #define RGBLIGHT_EFFECT_BREATHING
-    #define RGBLIGHT_EFFECT_RAINBOW_MOOD
-    #define RGBLIGHT_EFFECT_RAINBOW_SWIRL
-    #define RGBLIGHT_EFFECT_SNAKE
-    #define RGBLIGHT_EFFECT_KNIGHT
-    #define RGBLIGHT_EFFECT_CHRISTMAS
-    #define RGBLIGHT_EFFECT_STATIC_GRADIENT
-    #define RGBLIGHT_EFFECT_RGB_TEST
-    #define RGBLIGHT_EFFECT_ALTERNATING
-    #define RGBLIGHT_EFFECT_TWINKLE
-    #define RGBLIGHT_LIMIT_VAL 120
-    #define RGBLIGHT_HUE_STEP 10
-    #define RGBLIGHT_SAT_STEP 17
-    #define RGBLIGHT_VAL_STEP 17
-#endif
-
 #define RGB_MATRIX_DEFAULT_ON false
-//#define RGB_MATRIX_DEFAULT_HUE 0
-//#define RGB_MATRIX_DEFAULT_SAT 0
-//#define RGB_MATRIX_DEFAULT_VAL 0
+#define RGB_MATRIX_DEFAULT_HUE 0
+#define RGB_MATRIX_DEFAULT_SAT 0
+#define RGB_MATRIX_DEFAULT_VAL 0
 #define SPLIT_TRANSACTION_IDS_USER USER_SYNC_STATE

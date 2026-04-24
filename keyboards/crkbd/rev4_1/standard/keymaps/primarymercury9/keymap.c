@@ -26,14 +26,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mouse_jiggler.h"
 #include "transactions.h"
 
-//bool is_jiggling = false;
 bool is_leader_active = false;
+bool is_numpad_active = false;
+bool is_macro1_active = false;
+bool is_macro2_active = false;
+bool is_nav_active = false;
 bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
 
 typedef struct _sync_data_t {
     bool is_jiggling;
     bool is_leader_active;
+    bool is_numpad_active;
+    bool is_nav_active;
+    bool is_macro1_active;
+    bool is_macro2_active;
 } sync_data_t;
 
 
@@ -56,13 +63,6 @@ enum custom_keycodes {
 };
 
 /*#############################################################################
-                             Jiggler Toggle
-#############################################################################*/
-//void toggle_jiggler(void) {
-//    is_jiggling = !is_jiggling; /*flip boolean to true*/
-//}
-
-/*#############################################################################
                                  Aliases
 #############################################################################*/
 #define CC_TAB     LCTL_T(KC_TAB)
@@ -74,7 +74,6 @@ enum custom_keycodes {
 #define CC_RENT    LT(_NUMPAD, KC_ENT)
 #define CC_SPC     LT(_SYM, KC_SPC)
 #define CC_RGUI    LCTL_T(KC_APP)
-//#define CC_RGUI    KC_LCTL
 #define CC_QUOT    LALT_T(KC_QUOT)
 
 #define CC_HW      MO(_HW)
@@ -131,13 +130,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_NAV] = LAYOUT_split_3x6_3_ex2(
   //,-------------------------------------------------------------|     |--------------------------------------------------------------.
-      CC_MS , XXXXXXX, DM_REC1, DM_REC2, XXXXXXX, CC_JIGG, PM_LOGS,       PM_LOGS, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, KC_VOLU, QK_LEAD,
+      CC_MS , XXXXXXX, DM_REC1, DM_REC2, XXXXXXX, CC_JIGG, PM_LOGS,       CC_JIGG, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, KC_VOLU, QK_LEAD,
   //|--------+--------+--------+--------+--------+--------+-------|     |--------+--------+--------+--------+--------+--------+--------|
-     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, PM_ACON,       PM_ACON, KC_LEFT, KC_DOWN,  KC_UP , KC_RGHT, KC_MUTE, _______,
+     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, PM_ACON,       XXXXXXX, KC_LEFT, KC_DOWN,  KC_UP , KC_RGHT, KC_MUTE, _______,
   //|--------+--------+--------+--------+--------+--------+-------|     |--------+--------+--------+--------+--------+--------+--------|
      _______, XXXXXXX, DM_PLY1, DM_PLY2, DM_RSTP, XXXXXXX,                         KC_MPRV, KC_MSTP, KC_MPLY, KC_MNXT, KC_VOLD, _______,
   //|--------+--------+--------+--------+--------+--------|                      |--------+--------+--------+--------+--------+--------|
-                                 CC_HW , KC_DEL , QK_RBT ,                         CC_EDIT, KC_CAPS, CC_JIGG
+                                 CC_HW , KC_DEL , QK_RBT ,                         CC_EDIT, KC_CAPS, _______
                              //`--------------------------|                      |---------------------------'
 
   ),
@@ -368,28 +367,28 @@ void leader_end_user(void) {
 #endif
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    if (is_jiggling) {
-        uint8_t leds_to_light[] = {3, 26};
-        for (uint8_t i = 0; i < sizeof(leds_to_light) / sizeof(leds_to_light[0]); i++) {
-            uint8_t led = leds_to_light[i];
-            if (led >= led_min && led < led_max) {
-                rgb_matrix_set_color(led, 0, 255, 0);  // Green color
-            }
-        }
-    }
-
-    //light the bottom buttons a different colour
+    //set base colours
     switch (detected_host_os()) {
-        case OS_WINDOWS:
-            rgb_matrix_sethsv_noeeprom(0, 0, 0);
-            break;
         case OS_UNSURE:
+        case OS_WINDOWS: {
+            uint8_t leds_to_light[] = {5, 28}; // 'Home' keys only
+            for (uint8_t i = 0; i < sizeof(leds_to_light) / sizeof(leds_to_light[0]); i++) {
+                uint8_t led = leds_to_light[i];
+                if (led >= led_min && led < led_max) {
+                    rgb_matrix_set_color(led, 0, 0, 185);  // Blue color
+                    }
+                }
+            }
             break;
         case OS_LINUX:
         case OS_MACOS:
         case OS_IOS: {
-            rgb_matrix_sethsv_noeeprom(180, 255, 150);
-            uint8_t leds_to_light[] = {0, 7, 8, 21, 22, 23, 30, 31, 44, 45};
+            RGB rgb = hsv_to_rgb((HSV){180, 255, 150});
+            // Paint all LEDs in this half purple
+            for (uint8_t i = led_min; i < led_max; i++) {
+                rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+            }
+            uint8_t leds_to_light[] = {7, 8, 30, 31};
             for (uint8_t i = 0; i < sizeof(leds_to_light) / sizeof(leds_to_light[0]); i++) {
                 uint8_t led = leds_to_light[i];
                 if (led >= led_min && led < led_max) {
@@ -403,12 +402,23 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                     rgb_matrix_set_color(led, 0, 255, 0);  // Green color
                 }
             }
-         }
+            }
             break;
       return true;
     }
 
-    if (layer_state_is(3)) {
+    if (is_jiggling) {
+        uint8_t leds_to_light[] = {3, 26};
+        for (uint8_t i = 0; i < sizeof(leds_to_light) / sizeof(leds_to_light[0]); i++) {
+            uint8_t led = leds_to_light[i];
+            if (led >= led_min && led < led_max) {
+                rgb_matrix_set_color(led, 0, 255, 0);  // Green color
+            }
+        }
+    }
+
+
+    if (is_numpad_active) {
         uint8_t leds_to_light[] = {4, 5, 6, 9, 10, 11, 12, 13, 14, 7};
         for (uint8_t i = 0; i < sizeof(leds_to_light) / sizeof(leds_to_light[0]); i++) {
             uint8_t led = leds_to_light[i];
@@ -418,11 +428,78 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         }
     }
 
+    if (is_nav_active) {
+        uint8_t leds_to_light_jiggler[] = {3, 9, 14, 44};
+        for (uint8_t i = 0; i < sizeof(leds_to_light_jiggler) / sizeof(leds_to_light_jiggler[0]); i++) {
+            uint8_t led = leds_to_light_jiggler[i];
+            if (led >= led_min && led < led_max) {
+                rgb_matrix_set_color(led, 0, 255, 0);  // Green color
+            }
+        }
+        uint8_t leds_to_light_macros[] = {6, 11, 12};
+        for (uint8_t i = 0; i < sizeof(leds_to_light_macros) / sizeof(leds_to_light_macros[0]); i++) {
+            uint8_t led = leds_to_light_macros[i];
+            if (led >= led_min && led < led_max) {
+                rgb_matrix_set_color(led, 255, 0, 0);  // Red color
+            }
+        }
+        uint8_t leds_to_light_neutralise[] = {5, 28};
+        for (uint8_t i = 0; i < sizeof(leds_to_light_neutralise) / sizeof(leds_to_light_neutralise[0]); i++) {
+            uint8_t led = leds_to_light_neutralise[i];
+            if (led >= led_min && led < led_max) {
+                switch (detected_host_os()) {
+                    case OS_MACOS:
+                    case OS_IOS:
+                    case OS_LINUX:
+                    case OS_UNSURE: {
+                        RGB rgb = hsv_to_rgb((HSV){180, 255, 150});
+                        rgb_matrix_set_color(led, rgb.r, rgb.g, rgb.b);
+                        break;
+                    }
+                    case OS_WINDOWS:
+                        rgb_matrix_set_color(led, 0, 0, 0);  // Off
+                        break;
+                }
+            }
+        }
+        return true;
+    }
+
+    if (is_macro1_active) {
+        uint8_t leds_to_light[] = {12};
+        for (uint8_t i = 0; i < sizeof(leds_to_light) / sizeof(leds_to_light[0]); i++) {
+            uint8_t led = leds_to_light[i];
+                    // Flash at ~4Hz: toggles every 125ms
+            if ((timer_read() / 125) % 2 == 0) {
+                if (led >= led_min && led < led_max) {
+                    rgb_matrix_set_color(led, 255, 0, 0);  // red color
+                    }
+                } else {
+                    rgb_matrix_set_color(led, 0, 0, 0);  // off
+            }
+        }
+    }
+
+    if (is_macro2_active) {
+        uint8_t leds_to_light[] = {11};
+        for (uint8_t i = 0; i < sizeof(leds_to_light) / sizeof(leds_to_light[0]); i++) {
+            uint8_t led = leds_to_light[i];
+                    // Flash at ~4Hz: toggles every 125ms
+            if ((timer_read() / 125) % 2 == 0) {
+                if (led >= led_min && led < led_max) {
+                    rgb_matrix_set_color(led, 255, 0, 0);  // red color
+                    }
+                } else {
+                    rgb_matrix_set_color(led, 0, 0, 0);  // off
+            }
+        }
+    }
+
     if (is_leader_active) {
         rgb_matrix_set_color_all(0, 255, 0);
     }
 
-    return false; // Return false to allow other effects to run as well
+    return true;
 }
 
 
@@ -432,51 +509,104 @@ void sync_state_slave_handler(uint8_t in_buflen, const void *in_data,
     const sync_data_t *data = (const sync_data_t *)in_data;
     is_jiggling      = data->is_jiggling;
     is_leader_active = data->is_leader_active;
+    is_numpad_active = data->is_numpad_active;
+    is_nav_active = data->is_nav_active;
+    is_macro1_active = data->is_macro1_active;
+    is_macro2_active = data->is_macro2_active;
 }
 
 // ─── Register handler ─────────────────────────────────────────────────────────
 void keyboard_post_init_user(void) {
     rgb_matrix_enable_noeeprom();
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(HSV_OFF);
+    //rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
     transaction_register_rpc(USER_SYNC_STATE, sync_state_slave_handler);
 }
 
 // ─── Master pushes to slave periodically ──────────────────────────────────────
 void housekeeping_task_user(void) {
     if (is_keyboard_master()) {
-        static uint32_t last_sync          = 0;
+        //static uint32_t last_sync          = 0;
         static bool     last_jiggling      = false;
         static bool     last_leader_active = false;
+        static bool     last_numpad_active = false;
+        static bool     last_nav_active = false;
+        static bool     last_macro1_active = false;
+        static bool     last_macro2_active = false;
 
         bool state_changed = (is_jiggling      != last_jiggling) ||
+                             (is_numpad_active != last_numpad_active) ||
+                             (is_nav_active != last_nav_active) ||
+                             (is_macro1_active != last_macro1_active) ||
+                             (is_macro2_active != last_macro2_active) ||
                              (is_leader_active != last_leader_active);
-        bool keepalive_due = (timer_elapsed32(last_sync) > 500);
+        //bool keepalive_due = (timer_elapsed32(last_sync) > 500);
 
-        if (state_changed || keepalive_due) {
+        if (state_changed) {
+        //if (state_changed || keepalive_due) {
             sync_data_t data = {
                 .is_jiggling      = is_jiggling,
                 .is_leader_active = is_leader_active,
+                .is_numpad_active = is_numpad_active,
+                .is_nav_active = is_nav_active,
+                .is_macro1_active = is_macro1_active,
+                .is_macro2_active = is_macro2_active,
             };
 
-            if (transaction_rpc_send(USER_SYNC_STATE, sizeof(data), &data)) {
-                last_sync          = timer_read32();
+            transaction_rpc_send(USER_SYNC_STATE, sizeof(data), &data);
+                //last_sync          = timer_read32();
                 last_jiggling      = is_jiggling;
                 last_leader_active = is_leader_active;
+                last_numpad_active = is_numpad_active;
+                last_nav_active = is_nav_active;
+                last_macro1_active = is_macro1_active;
+                last_macro2_active = is_macro2_active;
             }
         }
     }
-}
 
 //LEDs -> RED when in booloader mode
 bool shutdown_user(bool jump_to_bootloader) {
     if (jump_to_bootloader) {
-        // Entering bootloader (e.g. QK_BOOT keycode) — set a visible color
         rgb_matrix_set_color_all(RGB_RED);
     } else {
-        // Soft reset (QK_REBOOT or QK_CLEAR_EEPROM) — different feedback
-        rgb_matrix_set_color_all(RGB_GREEN);
+        rgb_matrix_set_color_all(0, 0, 0);
     }
-    // REQUIRED: force-flush the LED buffer, otherwise the change never renders
     rgb_matrix_update_pwm_buffers();
     return false; // return false to skip the kb-level function
+}
+
+//activate variable when using numpad and nav layers
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (layer_state_cmp(state, _NUMPAD)) {
+        is_numpad_active = true;
+    } else {
+        is_numpad_active = false;
+    }
+    if (layer_state_cmp(state, _NAV)) {
+        is_nav_active = true;
+    } else {
+        is_nav_active = false;
+    }
+    return state;
+}
+
+//activate variable when using dynamic macros
+bool dynamic_macro_record_start_user(int8_t direction) {
+    if (direction == 1) {
+        is_macro1_active = true;
+    } else {
+        is_macro2_active = true;
+    }
+    return false;
+}
+
+bool dynamic_macro_record_end_user(int8_t direction) {
+    if (direction == 1) {
+        is_macro1_active = false;
+    } else {
+        is_macro2_active = false;
+    }
+    return false;
 }
